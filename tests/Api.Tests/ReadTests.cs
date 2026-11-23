@@ -126,4 +126,15 @@ public sealed class ReadTests(ApiFactory api) : ApiTest(api)
         Assert.Contains("\"authorizationCode\"", doc, StringComparison.Ordinal);
         Assert.Equal(HttpStatusCode.OK, (await Http.GetAsync("/docs/", Ct)).StatusCode);
     }
+
+    [Theory]
+    [InlineData("/docs/")]
+    [InlineData("/people")]
+    [InlineData("/health")]
+    [InlineData("/no-such-page")]
+    public async Task Every_response_asks_search_engines_not_to_index(string path)
+    {
+        var response = await Http.GetAsync(path, Ct);
+        Assert.Equal("noindex, nofollow", string.Join(", ", response.Headers.GetValues("X-Robots-Tag")));
+    }
 }

@@ -38,6 +38,17 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 var app = builder.Build();
 
 app.UseForwardedHeaders();
+// Kept out of search results: the docs are also on the portfolio site (thebensage.com/api-reference).
+// Set as the response starts, so error responses (whose headers the exception handler clears) get it too.
+app.Use((context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow";
+        return Task.CompletedTask;
+    });
+    return next(context);
+});
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 app.UseCors();

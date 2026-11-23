@@ -44,7 +44,26 @@ public static class ApiDocs
             });
             openApi.AddDocumentTransformer<OpenApiAuth>();
             openApi.AddOperationTransformer<OpenApiAuth>();
+            // XML comments over several lines are joined with the OS's line break, so a build on
+            // Windows wrote \r\n and CI's (Linux) \n. Always \n, so the committed document matches.
+            openApi.AddSchemaTransformer((schema, _, _) =>
+            {
+                schema.Description = Lf(schema.Description);
+                return Task.CompletedTask;
+            });
+            openApi.AddOperationTransformer((operation, _, _) =>
+            {
+                operation.Summary = Lf(operation.Summary);
+                operation.Description = Lf(operation.Description);
+                foreach (var parameter in operation.Parameters ?? [])
+                {
+                    if (parameter is Microsoft.OpenApi.OpenApiParameter concrete) concrete.Description = Lf(concrete.Description);
+                }
+                return Task.CompletedTask;
+            });
         });
+
+    private static string? Lf(string? text) => text?.ReplaceLineEndings("\n");
 
     public static WebApplication MapApiDocs(this WebApplication app)
     {

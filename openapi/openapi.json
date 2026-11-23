@@ -812,7 +812,7 @@
             "description": "1 to 5 of the interests in `GET /people/options`."
           }
         },
-        "description": "What a person sent to `POST /people` or `PUT /people/{id}`. Optional text may be\r\nleft out, null or empty; it is stored as null."
+        "description": "What a person sent to `POST /people` or `PUT /people/{id}`. Optional text may be\nleft out, null or empty; it is stored as null."
       },
       "PersonPage": {
         "required": [

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- The web host: Program.cs, auth, OpenAPI + Scalar docs and the endpoints. -->
+  <PropertyGroup>
+    <RootNamespace>Api</RootNamespace>
+    <!-- Every build writes the OpenAPI document to openapi/ (the contract the clients are generated
+         from; commit it). The Dockerfile turns this off. -->
+    <OpenApiDocumentsDirectory>$(MSBuildProjectDirectory)/../../openapi</OpenApiDocumentsDirectory>
+    <OpenApiGenerateDocumentsOptions>--file-name openapi</OpenApiGenerateDocumentsOptions>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <!-- dotnet ef runs with this project as the startup project. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" PrivateAssets="all" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Api.Application\Api.Application.csproj" />
+    <ProjectReference Include="..\Api.Infrastructure\Api.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Api.Tests" />
+  </ItemGroup>
+</Project>

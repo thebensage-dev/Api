@@ -1,0 +1,27 @@
+# Rebuilt inside the image
+**/bin
+**/obj
+TestResults
+
+# Secrets: never sent to the Docker build.
+.env
+.env.*
+**/appsettings.*.local.json
+*.pem
+*.key
+*.pfx
+
+# Not needed to build or run
+clients
+openapi
+.git
+.github
+.idea
+.vs
+.vscode
+tests
+*.md
+*.log
+compose.yaml
+Dockerfile
+.dockerignore

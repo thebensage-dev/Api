@@ -1,0 +1,63 @@
+# Weekly update PRs, at most a few a week: minor and patch updates arrive together in one PR per
+# ecosystem, and only majors come on their own.
+version: 2
+updates:
+  # NuGet packages (versions live in Directory.Packages.props).
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    # Skip releases younger than 3 days (most bad releases are pulled by then).
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 5
+    ignore:
+      # .NET 10 is the LTS: these packages' next majors need .NET 11. Move them with the next LTS.
+      - dependency-name: "Microsoft.*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Npgsql*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "EFCore.NamingConventions"
+        update-types: ["version-update:semver-major"]
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  # The TypeScript client (clients/typescript).
+  - package-ecosystem: npm
+    directory: /clients/typescript
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 3
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  # The FROM lines in the Dockerfile.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # The .NET 10 LTS images; move with the next LTS.
+      - dependency-name: "dotnet/*"
+        update-types: ["version-update:semver-major"]
+
+  # The PostgreSQL image in compose.yaml.
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # Never a new PostgreSQL major without a dump and restore.
+      - dependency-name: postgres
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]

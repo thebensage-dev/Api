@@ -1,0 +1,6 @@
+# Always use LF line endings, on every OS, so dotnet format and diffs agree.
+* text=auto eol=lf
+
+# Binary files: never touch.
+*.ico binary
+*.png binary

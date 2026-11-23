@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The core: entities and their rules. References nothing else in the solution. -->
+  <PropertyGroup>
+    <RootNamespace>Api.Domain</RootNamespace>
+  </PropertyGroup>
+</Project>

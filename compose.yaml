@@ -1,0 +1,48 @@
+# Production stack for Coolify: the API and its PostgreSQL. Deploy as one Coolify application
+# named "api" (Docker Compose build pack, this repo, base directory /), and set the domain of
+# the "api" service to https://api.<your-domain>:8080 (the container port Coolify's proxy
+# forwards to; nothing is published on the host).
+#
+# Don't type values into Coolify: the deploy job in .github/workflows/ci.yml writes them (see
+# .env.example). The one exception is SERVICE_PASSWORD_64_APIDB, a Coolify "magic" variable:
+# Coolify generates the database password on the first deploy and keeps it.
+#
+# Locally the whole platform, this API included, runs from ../Infrastructure/local/compose.yaml.
+services:
+  api:
+    # Built and pushed by CI; the deploy job sets API_IMAGE_TAG to the commit's sha-<commit> tag.
+    image: ghcr.io/thebensage-dev/api:${API_IMAGE_TAG:-main}
+    restart: unless-stopped
+    depends_on:
+      api-db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: Host=api-db;Database=api;Username=api;Password=${SERVICE_PASSWORD_64_APIDB}
+      # authentik's OAuth base; the API accepts tokens of its own "api" client and the User
+      # Directory's (appsettings.json, Auth:Clients).
+      Auth__Authority: ${AUTH_AUTHORITY:?set AUTH_AUTHORITY}
+      # "true" for the first deploy only: adds the 12 demo people to an empty table.
+      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-false}
+    expose:
+      - "8080"
+
+  api-db:
+    image: postgres:18.7-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: api
+      POSTGRES_USER: api
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_64_APIDB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d api -U api"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    volumes:
+      # Persistent volume: every person and change. Back it up. Never rename it: Coolify would
+      # start an empty one. (PostgreSQL 18 keeps its data under /var/lib/postgresql/18.)
+      - api_db:/var/lib/postgresql
+
+volumes:
+  api_db:

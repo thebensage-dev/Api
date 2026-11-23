@@ -1,0 +1,931 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "TheBensage API",
+    "description": "A general-use REST API. Reading is open to everyone; adding, editing and deleting need an authentik sign-in (the Authentication button on this page).",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/people": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "summary": "Search and list people",
+        "description": "Every word of `q` must match, ignoring case and accents. Without `sort`, a search puts the best matches first (a name word starting with the term, then the term elsewhere in the name, then in any other field) and the list is otherwise newest first.",
+        "operationId": "ListPeople",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "interests",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonPage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "People"
+        ],
+        "summary": "Add a person",
+        "operationId": "CreatePerson",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid authentik token."
+          },
+          "403": {
+            "description": "Signed in, but not an editor for this app (ask for access on the sign-in page)."
+          }
+        },
+        "security": [
+          {
+            "authentik": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          }
+        ]
+      }
+    },
+    "/people/summary": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "summary": "Totals for the whole directory",
+        "operationId": "GetPeopleSummary",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectorySummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/people/options": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "summary": "Allowed countries, interests, age ranges and sort orders",
+        "operationId": "GetPeopleOptions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PeopleOptions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/people/audit-log": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "summary": "The audit log, newest first: who added, edited or deleted whom",
+        "operationId": "GetPeopleAuditLog",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PersonAuditEntryDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid authentik token."
+          },
+          "403": {
+            "description": "Signed in, but not an editor for this app (ask for access on the sign-in page)."
+          }
+        },
+        "security": [
+          {
+            "authentik": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          }
+        ]
+      }
+    },
+    "/people/{id}": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "summary": "Get one person",
+        "operationId": "GetPerson",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "People"
+        ],
+        "summary": "Replace a person's details",
+        "operationId": "UpdatePerson",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid authentik token."
+          },
+          "403": {
+            "description": "Signed in, but not an editor for this app (ask for access on the sign-in page)."
+          }
+        },
+        "security": [
+          {
+            "authentik": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "People"
+        ],
+        "summary": "Delete a person",
+        "operationId": "DeletePerson",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid authentik token."
+          },
+          "403": {
+            "description": "Signed in, but not an editor for this app (ask for access on the sign-in page)."
+          }
+        },
+        "security": [
+          {
+            "authentik": [
+              "openid",
+              "profile",
+              "email"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgeRangeOption": {
+        "required": [
+          "value",
+          "min",
+          "max"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "min": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          }
+        }
+      },
+      "CountryCount": {
+        "required": [
+          "code",
+          "name",
+          "people"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "people": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CountryOption": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "DirectorySummary": {
+        "required": [
+          "people",
+          "averageAge",
+          "countries",
+          "interests"
+        ],
+        "type": "object",
+        "properties": {
+          "people": {
+            "type": "integer",
+            "description": "How many people there are.",
+            "format": "int32"
+          },
+          "averageAge": {
+            "type": "integer",
+            "description": "Their average age, rounded.",
+            "format": "int32"
+          },
+          "countries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CountryCount"
+            },
+            "description": "People per country, by country name."
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterestCount"
+            },
+            "description": "People per interest, most popular first."
+          }
+        },
+        "description": "Totals for the whole directory."
+      },
+      "HttpValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "InterestCount": {
+        "required": [
+          "name",
+          "people"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "people": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PeopleOptions": {
+        "required": [
+          "countries",
+          "interests",
+          "maxInterests",
+          "ageRanges",
+          "sorts"
+        ],
+        "type": "object",
+        "properties": {
+          "countries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CountryOption"
+            }
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "maxInterests": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ageRanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgeRangeOption"
+            }
+          },
+          "sorts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "The allowed values of the fields and filters."
+      },
+      "PersonAuditEntryDto": {
+        "required": [
+          "id",
+          "personId",
+          "action",
+          "at",
+          "byName",
+          "client"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "personId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "action": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "byName": {
+            "type": "string"
+          },
+          "client": {
+            "type": "string"
+          }
+        },
+        "description": "One line of the audit log."
+      },
+      "PersonDto": {
+        "required": [
+          "id",
+          "fullName",
+          "email",
+          "phone",
+          "age",
+          "country",
+          "city",
+          "jobTitle",
+          "bio",
+          "interests",
+          "createdAt",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "country": {
+            "type": "string"
+          },
+          "city": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "jobTitle": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bio": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "A person, as the API returns it."
+      },
+      "PersonInput": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "examples": [
+              "Amara Okafor"
+            ],
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "examples": [
+              "amara.okafor@example.com"
+            ],
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "phone": {
+            "examples": [
+              "+44 7700 900123"
+            ],
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "age": {
+            "examples": [
+              29
+            ],
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "country": {
+            "examples": [
+              "GB"
+            ],
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "ISO 3166-1 alpha-2 code (see `GET /people/options`)."
+          },
+          "city": {
+            "examples": [
+              "Manchester"
+            ],
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "jobTitle": {
+            "examples": [
+              "Frontend developer"
+            ],
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bio": {
+            "examples": [
+              "Builds accessible design systems."
+            ],
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "interests": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "description": "1 to 5 of the interests in `GET /people/options`."
+          }
+        },
+        "description": "What a person sent to `POST /people` or `PUT /people/{id}`. Optional text may be\r\nleft out, null or empty; it is stored as null."
+      },
+      "PersonPage": {
+        "required": [
+          "items",
+          "total",
+          "page",
+          "pageCount",
+          "from",
+          "to",
+          "terms"
+        ],
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonDto"
+            },
+            "description": "The people on this page."
+          },
+          "total": {
+            "type": "integer",
+            "description": "How many people match, on every page.",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "description": "This page's number, from 1 (out-of-range pages are clamped).",
+            "format": "int32"
+          },
+          "pageCount": {
+            "type": "integer",
+            "description": "How many pages there are (at least 1).",
+            "format": "int32"
+          },
+          "from": {
+            "type": "integer",
+            "description": "The position of the first item on this page, from 1 (0 when nothing matches).",
+            "format": "int32"
+          },
+          "to": {
+            "type": "integer",
+            "description": "The position of the last item on this page.",
+            "format": "int32"
+          },
+          "terms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The normalised search words, for highlighting matches."
+          }
+        },
+        "description": "One page of the list."
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authentik": {
+        "type": "oauth2",
+        "description": "Sign in with authentik. Writes need it; reads don't.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://id.example.com/application/o/authorize/",
+            "tokenUrl": "https://id.example.com/application/o/token/",
+            "scopes": {
+              "openid": "Who you are",
+              "profile": "Your name",
+              "email": "Your email address"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "People"
+    }
+  ]
+}

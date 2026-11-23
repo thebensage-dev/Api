@@ -1,0 +1,47 @@
+{
+  "name": "@thebensage-dev/api-client",
+  "version": "0.1.0",
+  "description": "Typed client for TheBensage API, generated from its OpenAPI document. Sends the authentik token only to the endpoints that need it.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebensage-dev/Api.git",
+    "directory": "clients/typescript"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "generate:check": "node scripts/generate.mjs --check",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test",
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.build.json",
+    "check": "npm run generate:check && npm run typecheck && npm run test && npm run build",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "~5.9.3"
+  }
+}

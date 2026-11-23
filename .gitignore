@@ -1,0 +1,25 @@
+# Build output
+bin/
+obj/
+/artifacts/
+TestResults/
+*.trx
+
+# Secrets: real values live in Coolify (written by the deploy job), never in git.
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+*.pem
+*.key
+*.pfx
+
+# Editors, OS and logs
+.DS_Store
+Thumbs.db
+.idea/
+.vs/
+.vscode/
+*.user
+*.swp
+*.log

@@ -30,7 +30,7 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v7
       - name: Set up .NET (version from global.json)
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: Build the API (writes openapi/openapi.json)

@@ -20,7 +20,7 @@ public static class PeopleEndpoints
 
         people.MapGet("/", List)
             .WithName("ListPeople")
-            .WithSummary("Search and list people")
+            .WithSummary("List people")
             .WithDescription(
                 "Every word of `q` must match, ignoring case and accents. Without `sort`, a search " +
                 "puts the best matches first (a name word starting with the term, then the term " +
@@ -28,38 +28,42 @@ public static class PeopleEndpoints
 
         people.MapGet("/summary", Summary)
             .WithName("GetPeopleSummary")
-            .WithSummary("Totals for the whole directory");
+            .WithSummary("Get summary")
+            .WithDescription("Totals for the whole directory.");
 
         people.MapGet("/options", Options)
             .WithName("GetPeopleOptions")
-            .WithSummary("Allowed countries, interests, age ranges and sort orders");
+            .WithSummary("Get options")
+            .WithDescription("Allowed countries, interests, age ranges and sort orders.");
 
         people.MapGet("/audit-log", AuditLog)
             .WithName("GetPeopleAuditLog")
-            .WithSummary("The audit log, newest first: who added, edited or deleted whom")
+            .WithSummary("Get audit log")
+            .WithDescription("Newest first: who added, edited or deleted whom.")
             .RequireAuthorization(AuthSetup.EditorPolicy);
 
         people.MapGet("/{id:int}", Get)
             .WithName("GetPerson")
-            .WithSummary("Get one person")
+            .WithSummary("Get person")
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         people.MapPost("/", Create)
             .WithName("CreatePerson")
-            .WithSummary("Add a person")
+            .WithSummary("Add person")
             .ProducesProblem(StatusCodes.Status409Conflict)
             .RequireAuthorization(AuthSetup.EditorPolicy);
 
         people.MapPut("/{id:int}", Update)
             .WithName("UpdatePerson")
-            .WithSummary("Replace a person's details")
+            .WithSummary("Update person")
+            .WithDescription("Replaces all of a person's details.")
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status409Conflict)
             .RequireAuthorization(AuthSetup.EditorPolicy);
 
         people.MapDelete("/{id:int}", Delete)
             .WithName("DeletePerson")
-            .WithSummary("Delete a person")
+            .WithSummary("Delete person")
             .ProducesProblem(StatusCodes.Status404NotFound)
             .RequireAuthorization(AuthSetup.EditorPolicy);
 

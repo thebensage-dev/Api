@@ -10,12 +10,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Search and list people
+         * List people
          * @description Every word of `q` must match, ignoring case and accents. Without `sort`, a search puts the best matches first (a name word starting with the term, then the term elsewhere in the name, then in any other field) and the list is otherwise newest first.
          */
         get: operations["ListPeople"];
         put?: never;
-        /** Add a person */
+        /** Add person */
         post: operations["CreatePerson"];
         delete?: never;
         options?: never;
@@ -30,12 +30,15 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get one person */
+        /** Get person */
         get: operations["GetPerson"];
-        /** Replace a person's details */
+        /**
+         * Update person
+         * @description Replaces all of a person's details.
+         */
         put: operations["UpdatePerson"];
         post?: never;
-        /** Delete a person */
+        /** Delete person */
         delete: operations["DeletePerson"];
         options?: never;
         head?: never;
@@ -49,7 +52,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** The audit log, newest first: who added, edited or deleted whom */
+        /**
+         * Get audit log
+         * @description Newest first: who added, edited or deleted whom.
+         */
         get: operations["GetPeopleAuditLog"];
         put?: never;
         post?: never;
@@ -66,7 +72,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Allowed countries, interests, age ranges and sort orders */
+        /**
+         * Get options
+         * @description Allowed countries, interests, age ranges and sort orders.
+         */
         get: operations["GetPeopleOptions"];
         put?: never;
         post?: never;
@@ -83,7 +92,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Totals for the whole directory */
+        /**
+         * Get summary
+         * @description Totals for the whole directory.
+         */
         get: operations["GetPeopleSummary"];
         put?: never;
         post?: never;

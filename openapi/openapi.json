@@ -11,7 +11,7 @@
         "tags": [
           "People"
         ],
-        "summary": "Search and list people",
+        "summary": "List people",
         "description": "Every word of `q` must match, ignoring case and accents. Without `sort`, a search puts the best matches first (a name word starting with the term, then the term elsewhere in the name, then in any other field) and the list is otherwise newest first.",
         "operationId": "ListPeople",
         "parameters": [
@@ -87,7 +87,7 @@
         "tags": [
           "People"
         ],
-        "summary": "Add a person",
+        "summary": "Add person",
         "operationId": "CreatePerson",
         "requestBody": {
           "content": {
@@ -153,7 +153,8 @@
         "tags": [
           "People"
         ],
-        "summary": "Totals for the whole directory",
+        "summary": "Get summary",
+        "description": "Totals for the whole directory.",
         "operationId": "GetPeopleSummary",
         "responses": {
           "200": {
@@ -174,7 +175,8 @@
         "tags": [
           "People"
         ],
-        "summary": "Allowed countries, interests, age ranges and sort orders",
+        "summary": "Get options",
+        "description": "Allowed countries, interests, age ranges and sort orders.",
         "operationId": "GetPeopleOptions",
         "responses": {
           "200": {
@@ -195,7 +197,8 @@
         "tags": [
           "People"
         ],
-        "summary": "The audit log, newest first: who added, edited or deleted whom",
+        "summary": "Get audit log",
+        "description": "Newest first: who added, edited or deleted whom.",
         "operationId": "GetPeopleAuditLog",
         "parameters": [
           {
@@ -244,7 +247,7 @@
         "tags": [
           "People"
         ],
-        "summary": "Get one person",
+        "summary": "Get person",
         "operationId": "GetPerson",
         "parameters": [
           {
@@ -284,7 +287,8 @@
         "tags": [
           "People"
         ],
-        "summary": "Replace a person's details",
+        "summary": "Update person",
+        "description": "Replaces all of a person's details.",
         "operationId": "UpdatePerson",
         "parameters": [
           {
@@ -369,7 +373,7 @@
         "tags": [
           "People"
         ],
-        "summary": "Delete a person",
+        "summary": "Delete person",
         "operationId": "DeletePerson",
         "parameters": [
           {

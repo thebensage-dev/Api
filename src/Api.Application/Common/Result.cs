@@ -11,7 +11,7 @@ public enum FailureKind
     Conflict,
 }
 
-/// <summary>A failed use case: what went wrong, a title for people and, optionally, errors per field.</summary>
+/// <summary>A failed use case: what went wrong, a title for users and, optionally, errors per field.</summary>
 /// <param name="Kind">What went wrong.</param>
 /// <param name="Title">A sentence to show the caller.</param>
 /// <param name="Fields">Errors per field (camelCase keys), so a form can show each next to its field.</param>

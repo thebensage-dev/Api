@@ -1,11 +1,11 @@
 using Api.Application.Common;
 
-namespace Api.Application.People;
+namespace Api.Application.Users;
 
-/// <summary>The ways a people use case can fail, with the words the caller sees.</summary>
-public static class PersonErrors
+/// <summary>The ways a users use case can fail, with the words the caller sees.</summary>
+public static class UserErrors
 {
-    public static readonly Failure NotFound = new(FailureKind.NotFound, "That person doesn't exist.");
+    public static readonly Failure NotFound = new(FailureKind.NotFound, "That user doesn't exist.");
 
     /// <summary>Shaped like a validation error, so the email field can show it.</summary>
     public static readonly Failure DuplicateEmail = new(

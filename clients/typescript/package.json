@@ -1,6 +1,6 @@
 {
   "name": "@thebensage-dev/api-client",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Typed client for TheBensage API, generated from its OpenAPI document. Sends the authentik token only to the endpoints that need it.",
   "license": "MIT",
   "repository": {

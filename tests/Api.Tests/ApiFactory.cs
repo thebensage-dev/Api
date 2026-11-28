@@ -83,17 +83,17 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         return http;
     }
 
-    /// <summary>Empties the tables and adds the 12 demo people again.</summary>
+    /// <summary>Empties the tables and adds the 12 demo users again.</summary>
     public async Task ResetAsync()
     {
         await using var scope = Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        await db.Database.ExecuteSqlRawAsync("TRUNCATE people, person_audit_log RESTART IDENTITY");
+        await db.Database.ExecuteSqlRawAsync("TRUNCATE users, user_audit_log RESTART IDENTITY");
         await DemoData.SeedAsync(db, TimeProvider.System);
     }
 }
 
-/// <summary>Every test class starts from the 12 demo people. Classes run one after another.</summary>
+/// <summary>Every test class starts from the 12 demo users. Classes run one after another.</summary>
 public abstract class ApiTest(ApiFactory api) : IAsyncLifetime
 {
     protected ApiFactory Api { get; } = api;

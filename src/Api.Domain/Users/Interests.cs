@@ -1,8 +1,8 @@
 using System.Collections.Frozen;
 
-namespace Api.Domain.People;
+namespace Api.Domain.Users;
 
-/// <summary>The interests a person can pick: 1 to <see cref="Max"/> of them.</summary>
+/// <summary>The interests a user can pick: 1 to <see cref="Max"/> of them.</summary>
 public static class Interests
 {
     public const int Max = 5;

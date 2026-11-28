@@ -58,9 +58,9 @@ app.UseAuthorization();
 app.MapApiDocs();
 app.MapHealthChecks("/health");
 
-app.MapPeople();
+app.MapUsers();
 
-// Bring the database up to date, then optionally add the demo people (not while the build writes
+// Bring the database up to date, then optionally add the demo users (not while the build writes
 // the OpenAPI document: there is no database then).
 var added = ApiDocs.IsBuildTime
     ? 0
@@ -71,7 +71,7 @@ await app.RunAsync();
 
 internal static partial class StartupLog
 {
-    [LoggerMessage(Level = LogLevel.Information, Message = "Demo data: added {Count} people.")]
+    [LoggerMessage(Level = LogLevel.Information, Message = "Demo data: added {Count} users.")]
     public static partial void DemoDataAdded(ILogger logger, int count);
 }
 

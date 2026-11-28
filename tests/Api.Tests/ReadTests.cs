@@ -1,15 +1,15 @@
 using System.Net;
 using System.Net.Http.Json;
-using Api.Application.People.Dtos;
+using Api.Application.Users.Dtos;
 
 namespace Api.Tests;
 
 public sealed class ReadTests(ApiFactory api) : ApiTest(api)
 {
-    private async Task<PersonPage> List(string query = "") =>
-        (await Http.GetFromJsonAsync<PersonPage>($"/people{query}", Ct))!;
+    private async Task<UserPage> List(string query = "") =>
+        (await Http.GetFromJsonAsync<UserPage>($"/users{query}", Ct))!;
 
-    private static string[] Names(PersonPage page) => [.. page.Items.Select(p => p.FullName)];
+    private static string[] Names(UserPage page) => [.. page.Items.Select(p => p.FullName)];
 
     [Fact]
     public async Task Lists_newest_first_twelve_per_page()
@@ -88,8 +88,8 @@ public sealed class ReadTests(ApiFactory api) : ApiTest(api)
     [Fact]
     public async Task Summarises_the_directory()
     {
-        var summary = (await Http.GetFromJsonAsync<DirectorySummary>("/people/summary", Ct))!;
-        Assert.Equal(12, summary.People);
+        var summary = (await Http.GetFromJsonAsync<DirectorySummary>("/users/summary", Ct))!;
+        Assert.Equal(12, summary.Users);
         Assert.Equal(36, summary.AverageAge);
         Assert.Equal(new CountryCount("AU", "Australia", 1), summary.Countries[0]);
         Assert.Equal(new CountryCount("GB", "United Kingdom", 2), summary.Countries.Single(c => c.Code == "GB"));
@@ -97,13 +97,13 @@ public sealed class ReadTests(ApiFactory api) : ApiTest(api)
     }
 
     [Fact]
-    public async Task Gets_one_person_or_404()
+    public async Task Gets_one_user_or_404()
     {
-        var person = await Http.GetFromJsonAsync<PersonDto>("/people/1", Ct);
-        Assert.Equal("Amara Okafor", person!.FullName);
-        Assert.Equal(["Coding", "Music", "Volunteering"], person.Interests);
+        var user = await Http.GetFromJsonAsync<UserDto>("/users/1", Ct);
+        Assert.Equal("Amara Okafor", user!.FullName);
+        Assert.Equal(["Coding", "Music", "Volunteering"], user.Interests);
 
-        var missing = await Http.GetAsync("/people/999", Ct);
+        var missing = await Http.GetAsync("/users/999", Ct);
         Assert.Equal(HttpStatusCode.NotFound, missing.StatusCode);
         Assert.Equal("application/problem+json", missing.Content.Headers.ContentType?.MediaType);
     }
@@ -111,7 +111,7 @@ public sealed class ReadTests(ApiFactory api) : ApiTest(api)
     [Fact]
     public async Task Lists_the_allowed_values()
     {
-        var options = (await Http.GetFromJsonAsync<PeopleOptions>("/people/options", Ct))!;
+        var options = (await Http.GetFromJsonAsync<UserOptions>("/users/options", Ct))!;
         Assert.Contains(new CountryOption("GB", "United Kingdom"), options.Countries);
         Assert.Equal(16, options.Interests.Count);
         Assert.Equal(5, options.MaxInterests);
@@ -129,7 +129,7 @@ public sealed class ReadTests(ApiFactory api) : ApiTest(api)
 
     [Theory]
     [InlineData("/docs/")]
-    [InlineData("/people")]
+    [InlineData("/users")]
     [InlineData("/health")]
     [InlineData("/no-such-page")]
     public async Task Every_response_asks_search_engines_not_to_index(string path)

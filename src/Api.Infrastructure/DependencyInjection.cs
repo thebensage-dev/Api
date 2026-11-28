@@ -1,4 +1,4 @@
-using Api.Application.People;
+using Api.Application.Users;
 using Api.Infrastructure.Persistence;
 using Api.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +19,7 @@ public static class DependencyInjection
             .UseNpgsql(connectionString)
             .UseSnakeCaseNamingConvention());
 
-        services.AddScoped<IPeopleRepository, PeopleRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddHealthChecks().AddDbContextCheck<AppDbContext>("database");
 
@@ -28,7 +28,7 @@ public static class DependencyInjection
 
     /// <summary>
     /// Brings the database up to date, then, when <paramref name="seedDemoData"/> is set, adds the
-    /// demo people to an empty table. Returns how many people were added.
+    /// demo users to an empty table. Returns how many users were added.
     /// </summary>
     public static async Task<int> PrepareDatabaseAsync(
         this IServiceProvider services, bool seedDemoData, CancellationToken ct = default)

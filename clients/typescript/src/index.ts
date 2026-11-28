@@ -5,16 +5,16 @@ import { securedOperations } from "./secured.ts";
 export type { components, paths };
 
 type Schemas = components["schemas"];
-export type Person = Schemas["PersonDto"];
-export type PersonInput = Schemas["PersonInput"];
-export type PersonPage = Schemas["PersonPage"];
+export type User = Schemas["UserDto"];
+export type UserInput = Schemas["UserInput"];
+export type UserPage = Schemas["UserPage"];
 export type DirectorySummary = Schemas["DirectorySummary"];
-export type PeopleOptions = Schemas["PeopleOptions"];
-export type PersonAuditEntry = Schemas["PersonAuditEntryDto"];
+export type UserOptions = Schemas["UserOptions"];
+export type UserAuditEntry = Schemas["UserAuditEntryDto"];
 /** A 400 or 409: `errors` holds the messages per field (camelCase keys). */
 export type ValidationProblem = Schemas["HttpValidationProblemDetails"];
 
-/** The typed client: `api.GET("/people/{id}", { params: { path: { id } } })` returns `{ data, error, response }`. */
+/** The typed client: `api.GET("/users/{id}", { params: { path: { id } } })` returns `{ data, error, response }`. */
 export type ApiClient = Client<paths>;
 
 /**

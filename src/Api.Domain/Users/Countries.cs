@@ -1,6 +1,6 @@
 using System.Collections.Frozen;
 
-namespace Api.Domain.People;
+namespace Api.Domain.Users;
 
 /// <summary>
 /// ISO 3166-1 alpha-2 codes and their English names. A fixed list (the same one the User

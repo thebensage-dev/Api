@@ -6,14 +6,14 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/people": {
+    "/users": {
       "get": {
         "tags": [
-          "People"
+          "Users"
         ],
-        "summary": "List people",
+        "summary": "List users",
         "description": "Every word of `q` must match, ignoring case and accents. Without `sort`, a search puts the best matches first (a name word starting with the term, then the term elsewhere in the name, then in any other field) and the list is otherwise newest first.",
-        "operationId": "ListPeople",
+        "operationId": "ListUsers",
         "parameters": [
           {
             "name": "q",
@@ -76,7 +76,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonPage"
+                  "$ref": "#/components/schemas/UserPage"
                 }
               }
             }
@@ -85,15 +85,15 @@
       },
       "post": {
         "tags": [
-          "People"
+          "Users"
         ],
-        "summary": "Add person",
-        "operationId": "CreatePerson",
+        "summary": "Add user",
+        "operationId": "CreateUser",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonInput"
+                "$ref": "#/components/schemas/UserInput"
               }
             }
           },
@@ -105,7 +105,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonDto"
+                  "$ref": "#/components/schemas/UserDto"
                 }
               }
             }
@@ -148,14 +148,14 @@
         ]
       }
     },
-    "/people/summary": {
+    "/users/summary": {
       "get": {
         "tags": [
-          "People"
+          "Users"
         ],
         "summary": "Get summary",
         "description": "Totals for the whole directory.",
-        "operationId": "GetPeopleSummary",
+        "operationId": "GetUsersSummary",
         "responses": {
           "200": {
             "description": "OK",
@@ -170,21 +170,21 @@
         }
       }
     },
-    "/people/options": {
+    "/users/options": {
       "get": {
         "tags": [
-          "People"
+          "Users"
         ],
         "summary": "Get options",
         "description": "Allowed countries, interests, age ranges and sort orders.",
-        "operationId": "GetPeopleOptions",
+        "operationId": "GetUsersOptions",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PeopleOptions"
+                  "$ref": "#/components/schemas/UserOptions"
                 }
               }
             }
@@ -192,14 +192,14 @@
         }
       }
     },
-    "/people/audit-log": {
+    "/users/audit-log": {
       "get": {
         "tags": [
-          "People"
+          "Users"
         ],
         "summary": "Get audit log",
         "description": "Newest first: who added, edited or deleted whom.",
-        "operationId": "GetPeopleAuditLog",
+        "operationId": "GetUsersAuditLog",
         "parameters": [
           {
             "name": "limit",
@@ -218,7 +218,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PersonAuditEntryDto"
+                    "$ref": "#/components/schemas/UserAuditEntryDto"
                   }
                 }
               }
@@ -242,13 +242,13 @@
         ]
       }
     },
-    "/people/{id}": {
+    "/users/{id}": {
       "get": {
         "tags": [
-          "People"
+          "Users"
         ],
-        "summary": "Get person",
-        "operationId": "GetPerson",
+        "summary": "Get user",
+        "operationId": "GetUser",
         "parameters": [
           {
             "name": "id",
@@ -266,7 +266,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonDto"
+                  "$ref": "#/components/schemas/UserDto"
                 }
               }
             }
@@ -285,11 +285,11 @@
       },
       "put": {
         "tags": [
-          "People"
+          "Users"
         ],
-        "summary": "Update person",
-        "description": "Replaces all of a person's details.",
-        "operationId": "UpdatePerson",
+        "summary": "Update user",
+        "description": "Replaces all of a user's details.",
+        "operationId": "UpdateUser",
         "parameters": [
           {
             "name": "id",
@@ -305,7 +305,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonInput"
+                "$ref": "#/components/schemas/UserInput"
               }
             }
           },
@@ -317,7 +317,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PersonDto"
+                  "$ref": "#/components/schemas/UserDto"
                 }
               }
             }
@@ -371,10 +371,10 @@
       },
       "delete": {
         "tags": [
-          "People"
+          "Users"
         ],
-        "summary": "Delete person",
-        "operationId": "DeletePerson",
+        "summary": "Delete user",
+        "operationId": "DeleteUser",
         "parameters": [
           {
             "name": "id",
@@ -449,7 +449,7 @@
         "required": [
           "code",
           "name",
-          "people"
+          "users"
         ],
         "type": "object",
         "properties": {
@@ -459,7 +459,7 @@
           "name": {
             "type": "string"
           },
-          "people": {
+          "users": {
             "type": "integer",
             "format": "int32"
           }
@@ -482,16 +482,16 @@
       },
       "DirectorySummary": {
         "required": [
-          "people",
+          "users",
           "averageAge",
           "countries",
           "interests"
         ],
         "type": "object",
         "properties": {
-          "people": {
+          "users": {
             "type": "integer",
-            "description": "How many people there are.",
+            "description": "How many users there are.",
             "format": "int32"
           },
           "averageAge": {
@@ -504,14 +504,14 @@
             "items": {
               "$ref": "#/components/schemas/CountryCount"
             },
-            "description": "People per country, by country name."
+            "description": "Users per country, by country name."
           },
           "interests": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/InterestCount"
             },
-            "description": "People per interest, most popular first."
+            "description": "Users per interest, most popular first."
           }
         },
         "description": "Totals for the whole directory."
@@ -564,64 +564,59 @@
       "InterestCount": {
         "required": [
           "name",
-          "people"
+          "users"
         ],
         "type": "object",
         "properties": {
           "name": {
             "type": "string"
           },
-          "people": {
+          "users": {
             "type": "integer",
             "format": "int32"
           }
         }
       },
-      "PeopleOptions": {
-        "required": [
-          "countries",
-          "interests",
-          "maxInterests",
-          "ageRanges",
-          "sorts"
-        ],
+      "ProblemDetails": {
         "type": "object",
         "properties": {
-          "countries": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CountryOption"
-            }
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
           },
-          "interests": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
           },
-          "maxInterests": {
-            "type": "integer",
+          "status": {
+            "type": [
+              "null",
+              "integer"
+            ],
             "format": "int32"
           },
-          "ageRanges": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AgeRangeOption"
-            }
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
           },
-          "sorts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
-        },
-        "description": "The allowed values of the fields and filters."
+        }
       },
-      "PersonAuditEntryDto": {
+      "UserAuditEntryDto": {
         "required": [
           "id",
-          "personId",
+          "userId",
           "action",
           "at",
           "byName",
@@ -633,7 +628,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "personId": {
+          "userId": {
             "type": "integer",
             "format": "int32"
           },
@@ -653,7 +648,7 @@
         },
         "description": "One line of the audit log."
       },
-      "PersonDto": {
+      "UserDto": {
         "required": [
           "id",
           "fullName",
@@ -726,9 +721,9 @@
             "format": "date-time"
           }
         },
-        "description": "A person, as the API returns it."
+        "description": "A user, as the API returns it."
       },
-      "PersonInput": {
+      "UserInput": {
         "type": "object",
         "properties": {
           "fullName": {
@@ -776,7 +771,7 @@
               "null",
               "string"
             ],
-            "description": "ISO 3166-1 alpha-2 code (see `GET /people/options`)."
+            "description": "ISO 3166-1 alpha-2 code (see `GET /users/options`)."
           },
           "city": {
             "examples": [
@@ -813,12 +808,53 @@
             "items": {
               "type": "string"
             },
-            "description": "1 to 5 of the interests in `GET /people/options`."
+            "description": "1 to 5 of the interests in `GET /users/options`."
           }
         },
-        "description": "What a person sent to `POST /people` or `PUT /people/{id}`. Optional text may be\nleft out, null or empty; it is stored as null."
+        "description": "What a user sent to `POST /users` or `PUT /users/{id}`. Optional text may be\nleft out, null or empty; it is stored as null."
       },
-      "PersonPage": {
+      "UserOptions": {
+        "required": [
+          "countries",
+          "interests",
+          "maxInterests",
+          "ageRanges",
+          "sorts"
+        ],
+        "type": "object",
+        "properties": {
+          "countries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CountryOption"
+            }
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "maxInterests": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ageRanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgeRangeOption"
+            }
+          },
+          "sorts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "The allowed values of the fields and filters."
+      },
+      "UserPage": {
         "required": [
           "items",
           "total",
@@ -833,13 +869,13 @@
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PersonDto"
+              "$ref": "#/components/schemas/UserDto"
             },
-            "description": "The people on this page."
+            "description": "The users on this page."
           },
           "total": {
             "type": "integer",
-            "description": "How many people match, on every page.",
+            "description": "How many users match, on every page.",
             "format": "int32"
           },
           "page": {
@@ -871,42 +907,6 @@
           }
         },
         "description": "One page of the list."
-      },
-      "ProblemDetails": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "title": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "status": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "detail": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "instance": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
       }
     },
     "securitySchemes": {
@@ -929,7 +929,7 @@
   },
   "tags": [
     {
-      "name": "People"
+      "name": "Users"
     }
   ]
 }

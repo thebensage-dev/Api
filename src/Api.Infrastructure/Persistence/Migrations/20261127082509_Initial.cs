@@ -14,7 +14,25 @@ namespace Api.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "people",
+                name: "user_audit_log",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    action = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    by_subject = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    by_name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    client = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_user_audit_log", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "users",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -36,62 +54,44 @@ namespace Api.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_people", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "person_audit_log",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    person_id = table.Column<int>(type: "integer", nullable: false),
-                    action = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
-                    at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    by_subject = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    by_name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    client = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_person_audit_log", x => x.id);
+                    table.PrimaryKey("pk_users", x => x.id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_people_age",
-                table: "people",
-                column: "age");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_people_country",
-                table: "people",
-                column: "country");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_people_email",
-                table: "people",
-                column: "email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_person_audit_log_at",
-                table: "person_audit_log",
+                name: "ix_user_audit_log_at",
+                table: "user_audit_log",
                 column: "at");
 
             migrationBuilder.CreateIndex(
-                name: "ix_person_audit_log_person_id",
-                table: "person_audit_log",
-                column: "person_id");
+                name: "ix_user_audit_log_user_id",
+                table: "user_audit_log",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_age",
+                table: "users",
+                column: "age");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_country",
+                table: "users",
+                column: "country");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_email",
+                table: "users",
+                column: "email",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "people");
+                name: "user_audit_log");
 
             migrationBuilder.DropTable(
-                name: "person_audit_log");
+                name: "users");
         }
     }
 }

@@ -2,7 +2,7 @@
 // run the script again.
 
 export interface paths {
-    "/people": {
+    "/users": {
         parameters: {
             query?: never;
             header?: never;
@@ -10,42 +10,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List people
+         * List users
          * @description Every word of `q` must match, ignoring case and accents. Without `sort`, a search puts the best matches first (a name word starting with the term, then the term elsewhere in the name, then in any other field) and the list is otherwise newest first.
          */
-        get: operations["ListPeople"];
+        get: operations["ListUsers"];
         put?: never;
-        /** Add person */
-        post: operations["CreatePerson"];
+        /** Add user */
+        post: operations["CreateUser"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/people/{id}": {
+    "/users/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get person */
-        get: operations["GetPerson"];
+        /** Get user */
+        get: operations["GetUser"];
         /**
-         * Update person
-         * @description Replaces all of a person's details.
+         * Update user
+         * @description Replaces all of a user's details.
          */
-        put: operations["UpdatePerson"];
+        put: operations["UpdateUser"];
         post?: never;
-        /** Delete person */
-        delete: operations["DeletePerson"];
+        /** Delete user */
+        delete: operations["DeleteUser"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/people/audit-log": {
+    "/users/audit-log": {
         parameters: {
             query?: never;
             header?: never;
@@ -56,7 +56,7 @@ export interface paths {
          * Get audit log
          * @description Newest first: who added, edited or deleted whom.
          */
-        get: operations["GetPeopleAuditLog"];
+        get: operations["GetUsersAuditLog"];
         put?: never;
         post?: never;
         delete?: never;
@@ -65,7 +65,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/people/options": {
+    "/users/options": {
         parameters: {
             query?: never;
             header?: never;
@@ -76,7 +76,7 @@ export interface paths {
          * Get options
          * @description Allowed countries, interests, age ranges and sort orders.
          */
-        get: operations["GetPeopleOptions"];
+        get: operations["GetUsersOptions"];
         put?: never;
         post?: never;
         delete?: never;
@@ -85,7 +85,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/people/summary": {
+    "/users/summary": {
         parameters: {
             query?: never;
             header?: never;
@@ -96,7 +96,7 @@ export interface paths {
          * Get summary
          * @description Totals for the whole directory.
          */
-        get: operations["GetPeopleSummary"];
+        get: operations["GetUsersSummary"];
         put?: never;
         post?: never;
         delete?: never;
@@ -120,7 +120,7 @@ export interface components {
             code: string;
             name: string;
             /** Format: int32 */
-            people: number;
+            users: number;
         };
         CountryOption: {
             code: string;
@@ -133,15 +133,15 @@ export interface components {
              * @description Their average age, rounded.
              */
             averageAge: number;
-            /** @description People per country, by country name. */
+            /** @description Users per country, by country name. */
             countries: components["schemas"]["CountryCount"][];
-            /** @description People per interest, most popular first. */
+            /** @description Users per interest, most popular first. */
             interests: components["schemas"]["InterestCount"][];
             /**
              * Format: int32
-             * @description How many people there are.
+             * @description How many users there are.
              */
-            people: number;
+            users: number;
         };
         HttpValidationProblemDetails: {
             detail?: null | string;
@@ -157,19 +157,18 @@ export interface components {
         InterestCount: {
             name: string;
             /** Format: int32 */
-            people: number;
+            users: number;
         };
-        /** @description The allowed values of the fields and filters. */
-        PeopleOptions: {
-            ageRanges: components["schemas"]["AgeRangeOption"][];
-            countries: components["schemas"]["CountryOption"][];
-            interests: string[];
+        ProblemDetails: {
+            detail?: null | string;
+            instance?: null | string;
             /** Format: int32 */
-            maxInterests: number;
-            sorts: string[];
+            status?: null | number;
+            title?: null | string;
+            type?: null | string;
         };
         /** @description One line of the audit log. */
-        PersonAuditEntryDto: {
+        UserAuditEntryDto: {
             action: string;
             /** Format: date-time */
             at: string;
@@ -178,10 +177,10 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: int32 */
-            personId: number;
+            userId: number;
         };
-        /** @description A person, as the API returns it. */
-        PersonDto: {
+        /** @description A user, as the API returns it. */
+        UserDto: {
             /** Format: int32 */
             age: number;
             bio: null | string;
@@ -200,10 +199,10 @@ export interface components {
             updatedAt: string;
         };
         /**
-         * @description What a person sent to `POST /people` or `PUT /people/{id}`. Optional text may be
+         * @description What a user sent to `POST /users` or `PUT /users/{id}`. Optional text may be
          *     left out, null or empty; it is stored as null.
          */
-        PersonInput: {
+        UserInput: {
             /**
              * Format: int32
              * @example 29
@@ -214,7 +213,7 @@ export interface components {
             /** @example Manchester */
             city?: null | string;
             /**
-             * @description ISO 3166-1 alpha-2 code (see `GET /people/options`).
+             * @description ISO 3166-1 alpha-2 code (see `GET /users/options`).
              * @example GB
              */
             country?: null | string;
@@ -222,22 +221,31 @@ export interface components {
             email?: null | string;
             /** @example Amara Okafor */
             fullName?: null | string;
-            /** @description 1 to 5 of the interests in `GET /people/options`. */
+            /** @description 1 to 5 of the interests in `GET /users/options`. */
             interests?: null | string[];
             /** @example Frontend developer */
             jobTitle?: null | string;
             /** @example +44 7700 900123 */
             phone?: null | string;
         };
+        /** @description The allowed values of the fields and filters. */
+        UserOptions: {
+            ageRanges: components["schemas"]["AgeRangeOption"][];
+            countries: components["schemas"]["CountryOption"][];
+            interests: string[];
+            /** Format: int32 */
+            maxInterests: number;
+            sorts: string[];
+        };
         /** @description One page of the list. */
-        PersonPage: {
+        UserPage: {
             /**
              * Format: int32
              * @description The position of the first item on this page, from 1 (0 when nothing matches).
              */
             from: number;
-            /** @description The people on this page. */
-            items: components["schemas"]["PersonDto"][];
+            /** @description The users on this page. */
+            items: components["schemas"]["UserDto"][];
             /**
              * Format: int32
              * @description This page's number, from 1 (out-of-range pages are clamped).
@@ -257,17 +265,9 @@ export interface components {
             to: number;
             /**
              * Format: int32
-             * @description How many people match, on every page.
+             * @description How many users match, on every page.
              */
             total: number;
-        };
-        ProblemDetails: {
-            detail?: null | string;
-            instance?: null | string;
-            /** Format: int32 */
-            status?: null | number;
-            title?: null | string;
-            type?: null | string;
         };
     };
     responses: never;
@@ -278,7 +278,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    ListPeople: {
+    ListUsers: {
         parameters: {
             query?: {
                 age?: string;
@@ -301,12 +301,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonPage"];
+                    "application/json": components["schemas"]["UserPage"];
                 };
             };
         };
     };
-    CreatePerson: {
+    CreateUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -315,7 +315,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PersonInput"];
+                "application/json": components["schemas"]["UserInput"];
             };
         };
         responses: {
@@ -325,7 +325,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonDto"];
+                    "application/json": components["schemas"]["UserDto"];
                 };
             };
             /** @description Bad Request */
@@ -362,7 +362,7 @@ export interface operations {
             };
         };
     };
-    GetPerson: {
+    GetUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -379,7 +379,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonDto"];
+                    "application/json": components["schemas"]["UserDto"];
                 };
             };
             /** @description Not Found */
@@ -393,7 +393,7 @@ export interface operations {
             };
         };
     };
-    UpdatePerson: {
+    UpdateUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -404,7 +404,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PersonInput"];
+                "application/json": components["schemas"]["UserInput"];
             };
         };
         responses: {
@@ -414,7 +414,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonDto"];
+                    "application/json": components["schemas"]["UserDto"];
                 };
             };
             /** @description Bad Request */
@@ -460,7 +460,7 @@ export interface operations {
             };
         };
     };
-    DeletePerson: {
+    DeleteUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -503,7 +503,7 @@ export interface operations {
             };
         };
     };
-    GetPeopleAuditLog: {
+    GetUsersAuditLog: {
         parameters: {
             query?: {
                 limit?: number;
@@ -520,7 +520,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonAuditEntryDto"][];
+                    "application/json": components["schemas"]["UserAuditEntryDto"][];
                 };
             };
             /** @description No valid authentik token. */
@@ -539,7 +539,7 @@ export interface operations {
             };
         };
     };
-    GetPeopleOptions: {
+    GetUsersOptions: {
         parameters: {
             query?: never;
             header?: never;
@@ -554,12 +554,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PeopleOptions"];
+                    "application/json": components["schemas"]["UserOptions"];
                 };
             };
         };
     };
-    GetPeopleSummary: {
+    GetUsersSummary: {
         parameters: {
             query?: never;
             header?: never;

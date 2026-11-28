@@ -1,10 +1,10 @@
-namespace Api.Domain.People;
+namespace Api.Domain.Users;
 
 /// <summary>
-/// The size limits of a person's fields. Validation (<c>PersonRules</c>) and the database columns
+/// The size limits of a user's fields. Validation (<c>UserRules</c>) and the database columns
 /// both use them; they match the User Directory's form.
 /// </summary>
-public static class PersonLimits
+public static class UserLimits
 {
     public const int NameMax = 80;
     public const int EmailMax = 254;

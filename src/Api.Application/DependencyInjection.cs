@@ -1,4 +1,4 @@
-using Api.Application.People;
+using Api.Application.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -10,7 +10,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.TryAddSingleton(TimeProvider.System);
-        services.AddScoped<IPeopleService, PeopleService>();
+        services.AddScoped<IUserService, UserService>();
         return services;
     }
 }

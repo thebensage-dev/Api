@@ -3,8 +3,8 @@
 
 /** `METHOD /path` of every operation that needs an authentik access token. */
 export const securedOperations: ReadonlySet<string> = new Set([
-  "DELETE /people/{id}",
-  "GET /people/audit-log",
-  "POST /people",
-  "PUT /people/{id}",
+  "DELETE /users/{id}",
+  "GET /users/audit-log",
+  "POST /users",
+  "PUT /users/{id}",
 ]);

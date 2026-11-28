@@ -1,4 +1,4 @@
-namespace Api.Application.People;
+namespace Api.Application.Users;
 
 /// <summary>The age filters of the list.</summary>
 public static class AgeRanges

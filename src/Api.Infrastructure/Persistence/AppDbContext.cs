@@ -1,12 +1,12 @@
-using Api.Domain.People;
+using Api.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Infrastructure.Persistence;
 
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<Person> People => Set<Person>();
-    public DbSet<PersonAuditEntry> PersonAuditLog => Set<PersonAuditEntry>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<UserAuditEntry> UserAuditLog => Set<UserAuditEntry>();
 
     /// <summary>Every <c>IEntityTypeConfiguration</c> in <c>Configurations/</c>.</summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>

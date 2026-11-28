@@ -1,15 +1,15 @@
 using System.Text.RegularExpressions;
-using Api.Application.People.Dtos;
-using Api.Domain.People;
-using static Api.Domain.People.PersonLimits;
+using Api.Application.Users.Dtos;
+using Api.Domain.Users;
+using static Api.Domain.Users.UserLimits;
 
-namespace Api.Application.People;
+namespace Api.Application.Users;
 
 /// <summary>
 /// The validation rules, with the same limits and messages as the User Directory's form, so
 /// errors can be shown next to its fields as they are.
 /// </summary>
-public static partial class PersonRules
+public static partial class UserRules
 {
     [GeneratedRegex(@"^[\p{L}\p{M}][\p{L}\p{M}'’ .-]*$")]
     private static partial Regex NamePattern();
@@ -21,8 +21,8 @@ public static partial class PersonRules
     [GeneratedRegex(@"^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$")]
     private static partial Regex EmailPattern();
 
-    /// <summary>A valid, cleaned-up person, or the errors per field (camelCase keys).</summary>
-    public static (Person? Person, Dictionary<string, string[]> Errors) Validate(PersonInput input)
+    /// <summary>A valid, cleaned-up user, or the errors per field (camelCase keys).</summary>
+    public static (User? User, Dictionary<string, string[]> Errors) Validate(UserInput input)
     {
         var errors = new Dictionary<string, string[]>();
         void Fail(string field, string message) => errors[field] = [message];
@@ -63,7 +63,7 @@ public static partial class PersonRules
 
         if (errors.Count > 0) return (null, errors);
 
-        return (new Person
+        return (new User
         {
             FullName = fullName,
             Email = email,

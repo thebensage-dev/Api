@@ -26,11 +26,11 @@ const api = createApiClient({
   getToken: () => session.accessToken,
 });
 
-const { data, error, response } = await api.GET("/people/{id}", { params: { path: { id: 7 } } });
-if (data) console.log(data.fullName); // typed as Person
+const { data, error, response } = await api.GET("/users/{id}", { params: { path: { id: 7 } } });
+if (data) console.log(data.fullName); // typed as User
 if (response.status === 404) console.log(error?.title);
 
-const created = await api.POST("/people", { body: { fullName: "Ada King" /* … */ } });
+const created = await api.POST("/users", { body: { fullName: "Ada King" /* … */ } });
 if (created.response.status === 400) console.log(created.error?.errors); // messages per field
 ```
 
@@ -39,7 +39,7 @@ Calls never throw on an HTTP error: check `response.status` (or `data` / `error`
 ## Sign-in and security
 
 - **The package never signs anyone in or holds a secret.** Each app does its own authentik sign-in (UserDirectory uses openid-client) and hands the user's access token to `getToken`. That keeps client secrets and refresh tokens in the app, on its server.
-- **The token only goes where it's needed.** The client reads which operations need a sign-in from the OpenAPI document (writes and `GET /people/audit-log`) and adds `Authorization: Bearer …` to those alone. Public reads never carry it, and `getToken` isn't even called for them. `requiresSignIn(method, path)` exposes the same check.
+- **The token only goes where it's needed.** The client reads which operations need a sign-in from the OpenAPI document (writes and `GET /users/audit-log`) and adds `Authorization: Bearer …` to those alone. Public reads never carry it, and `getToken` isn't even called for them. `requiresSignIn(method, path)` exposes the same check.
 - **The API still decides.** It checks the issuer, audience, lifetime and signature of every token, and accepts only the authentik apps listed in its `Auth:Clients`. A new app that sends tokens needs its client id added there.
 - **Use it on a server** (Server Components, Server Actions, route handlers) when it sends tokens, so the token never reaches the browser. A read-only client (no `getToken`) is fine anywhere.
 

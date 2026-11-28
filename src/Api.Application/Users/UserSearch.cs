@@ -1,7 +1,7 @@
-namespace Api.Application.People;
+namespace Api.Application.Users;
 
-/// <summary>What the caller asked the list for, as sent (<c>GET /people</c>).</summary>
-public sealed record PeopleFilters(
+/// <summary>What the caller asked the list for, as sent (<c>GET /users</c>).</summary>
+public sealed record UserFilters(
     string? Q,
     string? Country,
     string? Age,
@@ -11,7 +11,7 @@ public sealed record PeopleFilters(
     int Size);
 
 /// <summary>The sort orders of the list.</summary>
-public enum PersonSort
+public enum UserSort
 {
     NewestFirst,
     OldestFirst,
@@ -29,31 +29,31 @@ public enum PersonSort
 /// <param name="Terms">Normalised search words; every one must match.</param>
 /// <param name="Country">An upper-case country code, or null for any.</param>
 /// <param name="Age">An age range, or null for any.</param>
-/// <param name="Interests">Interests the person must all have.</param>
+/// <param name="Interests">Interests the user must all have.</param>
 /// <param name="Sort">The order.</param>
-public sealed record PersonSearch(
+public sealed record UserSearch(
     IReadOnlyList<string> Terms,
     string? Country,
     AgeRanges.AgeRange? Age,
     IReadOnlyList<string> Interests,
-    PersonSort Sort);
+    UserSort Sort);
 
-public static class PeopleSearch
+public static class UserSearchRules
 {
     public const int DefaultPageSize = 12;
     public const int MaxPageSize = 100;
 
     /// <summary>The sort orders' names in the API. Leave sort out for best match while searching, otherwise newest first.</summary>
-    public static readonly IReadOnlyDictionary<string, PersonSort> Sorts = new Dictionary<string, PersonSort>(StringComparer.Ordinal)
+    public static readonly IReadOnlyDictionary<string, UserSort> Sorts = new Dictionary<string, UserSort>(StringComparer.Ordinal)
     {
-        ["id-desc"] = PersonSort.NewestFirst,
-        ["id-asc"] = PersonSort.OldestFirst,
-        ["name-asc"] = PersonSort.NameAscending,
-        ["name-desc"] = PersonSort.NameDescending,
-        ["age-asc"] = PersonSort.AgeAscending,
-        ["age-desc"] = PersonSort.AgeDescending,
-        ["country-asc"] = PersonSort.CountryAscending,
-        ["country-desc"] = PersonSort.CountryDescending,
+        ["id-desc"] = UserSort.NewestFirst,
+        ["id-asc"] = UserSort.OldestFirst,
+        ["name-asc"] = UserSort.NameAscending,
+        ["name-desc"] = UserSort.NameDescending,
+        ["age-asc"] = UserSort.AgeAscending,
+        ["age-desc"] = UserSort.AgeDescending,
+        ["country-asc"] = UserSort.CountryAscending,
+        ["country-desc"] = UserSort.CountryDescending,
     };
 
     /// <summary>The names of <see cref="Sorts"/>, in the order the options list shows them.</summary>

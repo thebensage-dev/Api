@@ -164,7 +164,7 @@ jobs:
       # The app's runtime settings: every APP_ENV_<NAME> becomes <NAME> in Coolify.
       APP_ENV_API_IMAGE_TAG: ${{ needs.image.outputs.tag }}
       APP_ENV_AUTH_AUTHORITY: https://id.${{ vars.DOMAIN }}/application/o/
-      # "true" for the first deploy only (the 12 demo people); empty values are skipped.
+      # "true" for the first deploy only (the 12 demo users); empty values are skipped.
       APP_ENV_SEED_DEMO_DATA: ${{ vars.SEED_DEMO_DATA }}
     steps:
       - name: Check the deploy secrets are set

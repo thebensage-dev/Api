@@ -21,7 +21,7 @@ services:
       # authentik's OAuth base; the API accepts tokens of its own "api" client and the User
       # Directory's (appsettings.json, Auth:Clients).
       Auth__Authority: ${AUTH_AUTHORITY:?set AUTH_AUTHORITY}
-      # "true" for the first deploy only: adds the 12 demo people to an empty table.
+      # "true" for the first deploy only: adds the 12 demo users to an empty table.
       SEED_DEMO_DATA: ${SEED_DEMO_DATA:-false}
     expose:
       - "8080"
@@ -40,7 +40,7 @@ services:
       retries: 5
       start_period: 20s
     volumes:
-      # Persistent volume: every person and change. Back it up. Never rename it: Coolify would
+      # Persistent volume: every user and change. Back it up. Never rename it: Coolify would
       # start an empty one. (PostgreSQL 18 keeps its data under /var/lib/postgresql/18.)
       - api_db:/var/lib/postgresql
 

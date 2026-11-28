@@ -1,9 +1,9 @@
 using Api.Domain.Common;
 
-namespace Api.Domain.People;
+namespace Api.Domain.Users;
 
-/// <summary>A person in the directory, as stored.</summary>
-public sealed class Person
+/// <summary>A user in the directory, as stored.</summary>
+public sealed class User
 {
     public int Id { get; set; }
     public required string FullName { get; set; }
@@ -28,7 +28,7 @@ public sealed class Person
     /// <summary>The country's English name, for sorting.</summary>
     public string CountryName { get; set; } = "";
 
-    /// <summary>Stamps a new person as created (and last updated) at <paramref name="at"/>.</summary>
+    /// <summary>Stamps a new user as created (and last updated) at <paramref name="at"/>.</summary>
     public void MarkCreated(DateTimeOffset at)
     {
         CreatedAt = UpdatedAt = at;
@@ -36,7 +36,7 @@ public sealed class Person
     }
 
     /// <summary>Replaces every editable field with those of <paramref name="details"/>.</summary>
-    public void UpdateDetails(Person details, DateTimeOffset at)
+    public void UpdateDetails(User details, DateTimeOffset at)
     {
         FullName = details.FullName;
         Email = details.Email;

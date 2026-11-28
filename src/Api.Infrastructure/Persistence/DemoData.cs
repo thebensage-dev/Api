@@ -1,16 +1,16 @@
-using Api.Domain.People;
+using Api.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Infrastructure.Persistence;
 
-/// <summary>The 12 demo people (the same as the User Directory's), added only to an empty table.</summary>
+/// <summary>The 12 demo users (the same as the User Directory's), added only to an empty table.</summary>
 public static class DemoData
 {
     private sealed record Demo(
         string Name, string Email, string? Phone, int Age, string Country, string City,
         string Job, string? Bio, string[] Interests, int JoinedDaysAgo);
 
-    private static readonly Demo[] People =
+    private static readonly Demo[] Users =
     [
         new("Amara Okafor", "amara.okafor@example.com", "+44 7700 900123", 29, "GB", "Manchester", "Frontend developer", "Builds accessible design systems and runs a weekend coding club for teenagers.", ["Coding", "Music", "Volunteering"], 120),
         new("Liam Chen", "liam.chen@example.com", "+1 604 555 0147", 34, "CA", "Vancouver", "Physiotherapist", "Former college rower. Spends most weekends on trails around the North Shore.", ["Sports", "Hiking", "Fitness"], 98),
@@ -26,16 +26,16 @@ public static class DemoData
         new("Olivia Brown", "olivia.brown@example.com", "+61 412 345 678", 63, "AU", "Melbourne", "Retired teacher", "Taught primary school for 30 years; now volunteers at the community garden.", ["Gardening", "Volunteering", "Books"], 2),
     ];
 
-    /// <summary>Adds the demo people if there is nobody yet. Returns how many were added.</summary>
+    /// <summary>Adds the demo users if there is nobody yet. Returns how many were added.</summary>
     public static async Task<int> SeedAsync(AppDbContext db, TimeProvider clock, CancellationToken ct = default)
     {
-        if (await db.People.AnyAsync(ct)) return 0;
+        if (await db.Users.AnyAsync(ct)) return 0;
 
         var now = clock.GetUtcNow();
-        foreach (var d in People)
+        foreach (var d in Users)
         {
             var joined = now.AddDays(-d.JoinedDaysAgo);
-            var person = new Person
+            var user = new User
             {
                 FullName = d.Name,
                 Email = d.Email,
@@ -47,10 +47,10 @@ public static class DemoData
                 Bio = d.Bio,
                 Interests = [.. d.Interests],
             };
-            person.MarkCreated(joined);
-            db.People.Add(person);
+            user.MarkCreated(joined);
+            db.Users.Add(user);
         }
         await db.SaveChangesAsync(ct);
-        return People.Length;
+        return Users.Length;
     }
 }

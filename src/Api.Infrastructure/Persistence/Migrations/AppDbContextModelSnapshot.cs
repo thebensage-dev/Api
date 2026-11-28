@@ -23,7 +23,7 @@ namespace Api.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Api.Domain.People.Person", b =>
+            modelBuilder.Entity("Api.Domain.Users.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,22 +104,22 @@ namespace Api.Infrastructure.Persistence.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
-                        .HasName("pk_people");
+                        .HasName("pk_users");
 
                     b.HasIndex("Age")
-                        .HasDatabaseName("ix_people_age");
+                        .HasDatabaseName("ix_users_age");
 
                     b.HasIndex("Country")
-                        .HasDatabaseName("ix_people_country");
+                        .HasDatabaseName("ix_users_country");
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasDatabaseName("ix_people_email");
+                        .HasDatabaseName("ix_users_email");
 
-                    b.ToTable("people", (string)null);
+                    b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Domain.People.PersonAuditEntry", b =>
+            modelBuilder.Entity("Api.Domain.Users.UserAuditEntry", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -156,20 +156,20 @@ namespace Api.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("client");
 
-                    b.Property<int>("PersonId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer")
-                        .HasColumnName("person_id");
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_person_audit_log");
+                        .HasName("pk_user_audit_log");
 
                     b.HasIndex("At")
-                        .HasDatabaseName("ix_person_audit_log_at");
+                        .HasDatabaseName("ix_user_audit_log_at");
 
-                    b.HasIndex("PersonId")
-                        .HasDatabaseName("ix_person_audit_log_person_id");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_audit_log_user_id");
 
-                    b.ToTable("person_audit_log", (string)null);
+                    b.ToTable("user_audit_log", (string)null);
                 });
 #pragma warning restore 612, 618
         }

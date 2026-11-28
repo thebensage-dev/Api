@@ -1,10 +1,10 @@
-namespace Api.Application.People.Dtos;
+namespace Api.Application.Users.Dtos;
 
 /// <summary>
-/// What a person sent to <c>POST /people</c> or <c>PUT /people/{id}</c>. Optional text may be
+/// What a user sent to <c>POST /users</c> or <c>PUT /users/{id}</c>. Optional text may be
 /// left out, null or empty; it is stored as null.
 /// </summary>
-public sealed record PersonInput
+public sealed record UserInput
 {
     /// <example>Amara Okafor</example>
     public string? FullName { get; init; }
@@ -14,7 +14,7 @@ public sealed record PersonInput
     public string? Phone { get; init; }
     /// <example>29</example>
     public int? Age { get; init; }
-    /// <summary>ISO 3166-1 alpha-2 code (see <c>GET /people/options</c>).</summary>
+    /// <summary>ISO 3166-1 alpha-2 code (see <c>GET /users/options</c>).</summary>
     /// <example>GB</example>
     public string? Country { get; init; }
     /// <example>Manchester</example>
@@ -23,6 +23,6 @@ public sealed record PersonInput
     public string? JobTitle { get; init; }
     /// <example>Builds accessible design systems.</example>
     public string? Bio { get; init; }
-    /// <summary>1 to 5 of the interests in <c>GET /people/options</c>.</summary>
+    /// <summary>1 to 5 of the interests in <c>GET /users/options</c>.</summary>
     public IReadOnlyList<string>? Interests { get; init; }
 }
